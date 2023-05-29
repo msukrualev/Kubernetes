@@ -1,0 +1,28 @@
+apiVersion: apps/v1 
+kind: Deployment 
+metadata:
+  name: web-flask-deploy
+spec:
+  replicas: 3 
+  selector:  
+    matchLabels:
+      app: web-flask # deployment bu etiketi taşıyan podlarla eşleşir
+  minReadySeconds: 10 #hazır olduğunu anlamamız için geçen süre
+  strategy: # pod ekleme çıkarma güncelleme sırasında izlenecek yol
+    type: RollingUpdate # sırayla güncelle ya da recreate ile aynı anda güncelle
+    rollingUpdate:
+      maxUnavailable: 1 
+      maxSurge: 1 
+  template: # bu kısımdan itibaren pod ve container detayları tanımlanır
+    metadata:
+      labels: # pod etikeleri burada
+        app: web-flask
+        env: front-end
+        
+        test: coupling 
+    spec:
+      containers:
+      - name: web-flask-cont
+        image: mefekadocker/web-flask:0.2 # docker hub repodan çekilen imajın adı
+        ports:
+        - containerPort: 8000 # container içindeki uygulamanın portu

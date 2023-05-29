@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: batch107-pod
+  labels:
+    app: batch107-web 
+spec:
+  volumes:
+    - name: batch107-pv-storage
+      persistentVolumeClaim:
+        claimName: batch107-pv-claim
+  containers:
+    - name: batch107-pv-container
+      image: nginx
+      ports:
+        - containerPort: 80
+          name: "http-server"
+      volumeMounts:
+        - mountPath: "/usr/share/nginx/html"
+          name: batch107-pv-storage
