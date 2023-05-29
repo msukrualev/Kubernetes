@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: project
+  labels:
+    app: k8s-project
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: k8sProject
+  template:
+    metadata:
+      labels:
+       app: k8sProject
+    spec:
+     containers:
+     - name: web-server
+       image: msukrualev/mid-k8s-project:1.0
+       ports:
+       - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-svc
+spec:
+  type: NodePort
+  selector:
+    app: k8sProject
+  ports:
+  - port: 80
+    targetPort: 80
+    nodePort: 30333
